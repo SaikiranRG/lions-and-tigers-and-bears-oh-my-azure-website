@@ -23,9 +23,20 @@ async function loadByBreed(breed) {
   if (breed !== 'Choose a dog breed...') {
     const response = await fetch(`https://dog.ceo/api/breed/${breed}/images`);
     const data = await response.json();
+// Take first 3 images for the slideshow (you can increase if you want)
+    images = data.message.slice(0, 3);
+    currentIndex = 0;
 
-    document.getElementById("photo1").innerHTML = `<img src="${data.message[0]}" height="400">`;
-    document.getElementById("photo2").innerHTML = `<img src="${data.message[1]}" height="400">`;
+    showImage(); // Start the slideshow
+  }
+}
+
+
+function showImage() {
+  if (images.length > 0) {
+    document.getElementById("photo1").innerHTML = `<img src="${images[currentIndex]}" height="400">`;
+    currentIndex = (currentIndex + 1) % images.length; // Loop back to first image
+    setTimeout(showImage, 3000); // Change image every 3 seconds
   }
 }
 
